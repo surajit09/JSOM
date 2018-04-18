@@ -1,0 +1,3 @@
+c:\users\hosme\documents\visual studio 2017\Projects\CSOMJSTest\CSOMJSTest\bin\Debug\CSOMJSTest.pdb
+c:\users\hosme\documents\visual studio 2017\Projects\CSOMJSTest\CSOMJSTest\obj\Debug\CSOMJSTest.dll
+c:\users\hosme\documents\visual studio 2017\Projects\CSOMJSTest\CSOMJSTest\obj\Debug\CSOMJSTest.pdb
