@@ -1,0 +1,153 @@
+Problem1
+
+using System;
+using System.IO;
+using System.Text;
+using Microsoft.SharePoint;
+namespace problem1
+{
+
+  class Program
+  {
+
+       public static void Main(){
+
+          //use Console.ReadLine(); to get console input 
+
+          //use Console.WriteLine(); to print output
+         
+         var site=new SPSite("http://contoso/sites/examplesite");
+         
+         var web=site.RootWeb;
+         
+         var list=web.Lists.TryGetList("ExampleList");
+         
+         var query=new SPQuery();
+         
+         query.ViewFields="<FieldRef Name='Title' />";
+
+         query.Query="<OrderBy>
+                       <FieldRef Name='Created' Ascending='False'></FieldRef>
+ </OrderBy>"
+         
+          query.RowLimit = 5;
+    
+         var items=list.GetItems(query);
+         
+        
+         StringBuilder titles = new StringBuilder();
+         
+         
+           
+           forEach(SPListItem item in items){
+           
+                 titles.Append(item.Title).Append(",");
+           
+             }
+             Console.WriteLine(titles.ToString());
+           
+         }
+         
+    }
+  }
+}
+
+Problem2
+
+
+using System;
+using System.IO;
+using System.Text;
+using Microsoft.SharePoint;
+namespace problem1
+{
+
+  class Program
+  {
+
+       public static void Main(){
+
+          //use Console.ReadLine(); to get console input 
+
+          //use Console.WriteLine(); to print output
+         var site=new SPSite("http://contoso/sites/examplesite");
+         
+         var web=site.RootWeb;
+         
+         var list=web.Lists.TryGetList("ExampleDocumentLibrary");
+         
+         var query=new SPQuery();
+         
+         query.ViewFields="<FieldRef Name='Title' />";
+         query.Query = @"<Where>
+                  <Eq>
+                    <FieldRef Name='Author' />
+                    <Value Type='User'><UserID/></Value>
+                  </Eq>
+                </Where>";  
+         
+         var items=list.GetItems(query);
+         
+         DateTime created = null;
+         int lastMonth = DateTime.Now.AddMonths(-1).Month;
+         
+         StringBuilder titles = new StringBuilder();
+         
+         forEach(SPListItem item in items){
+           
+              created=(DateTime)item["Created"];
+           if(created.Month==lastMonth)
+           {
+             titles.Append(item.Name).Append(",");
+             
+           }
+         }
+        Console.WriteLine(titles.ToString());
+
+    }
+  }
+}
+
+
+Problem3
+
+
+using System;
+using System.IO;
+using System.Data;
+using  Microsoft.Office.Server.Search.Query;
+
+namespace problem1
+{
+
+  class Program
+  {
+
+       public static void Main(){
+
+          //use Console.ReadLine(); to get console input 
+
+          //use Console.WriteLine(); to print output
+       
+        using(SPSite site=new SPSite("http://contoso/sites/examplesite")){
+            KeyWordQuery query=new KeyWordQuery(site);
+          
+          query.QueryText="SharePoint";
+          
+          SearchExecutor executor=new SearchExecutor(query);
+          
+          ResultTableCollection resultTableColl=executor.ExecuteQuery()
+                resultTableColl=resultTableColl.Filter("TableType",KnownTableTypes.RelevantResults)
+            
+           ResultTable resultTable = resultTableColl.FirstOrDefault(); 
+          
+          DataTable dataTable = resultTable.Table; 
+          
+          ASpGridView1.DataSource=dataTable;
+          
+          ASpGridView1.DataBind();
+          
+        }
+    }
+  }
+}
